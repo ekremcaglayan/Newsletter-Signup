@@ -33,11 +33,18 @@ app.post("/", function(req, res){
     const url = "https://us21.api.mailchimp.com/3.0/lists/36e35d1abe";
     const options = {
         method: "POST",
-        auth: "ekrem:2e9390cf86e597b9319644d1d6b77c7c-us21",
+        auth: "ekrem:9b47b11bf5fcd270e30662e4b6a4562a-us2",
 
     };
 
     const request = https.request(url, options, function(response){
+        if(response.statusCode === 200){
+            res.sendFile(__dirname + "/success.html");
+        }
+        else{
+            res.sendFile(__dirname + "/failure.html");
+        }
+
         response.on("data", function(data){
             console.log(JSON.parse(data));
         });
@@ -45,8 +52,12 @@ app.post("/", function(req, res){
 
     request.write(jsonData);
     request.end();
-
 });
+
+app.post("/failure", function(req, res){
+    res.redirect("/");
+});
+
 
 app.listen(3000, function(){
     console.log("Server is running on port 3000.");
